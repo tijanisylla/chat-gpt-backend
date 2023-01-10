@@ -41,7 +41,7 @@ def main():
 if __name__ == '__main__': 
          from waitress import serve
          app = main()
-         serve(app.run( host='0.0.0.0',port=8000))    
+         app.run( host='0.0.0.0',port=8000)
         # localhost:8000/api
         # Path: python/requirements.txt
         # openai==0.2.0
