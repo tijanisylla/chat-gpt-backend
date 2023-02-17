@@ -9,17 +9,8 @@ load_dotenv(find_dotenv())
 # get the API key from the .env file
 openai.api_key = os.getenv("OPENAI_API_KEY")
 model = "text-davinci-003"
-
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-app.route('/test', methods=['GET'])
-
-
-def test():
-    return jsonify({
-        "message": "Hello World!"
-    })
+CORS(app)
 
 
 @app.route('/api', methods=['POST'])
@@ -41,9 +32,12 @@ def gpt3():
     })
 
 
+@app.route('/test', methods=['GET'])
+def health():
+    return jsonify({
+        "message": "ok"
+    })
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-    # localhost:8000/api
-    # Path: python/requirements.txt
-    # openai==0.2.0
-    # flask==1.1.2
+    app.run(host='0.0.0.0', port=4000, debug=True)
