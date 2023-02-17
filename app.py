@@ -10,40 +10,38 @@ load_dotenv(find_dotenv())
 openai.api_key = os.getenv("OPENAI_API_KEY")
 model = "text-davinci-003"
 
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-def main():
-    app = Flask(__name__)
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
-    app.route('/test', methods=['GET'])
+app.route('/test', methods=['GET'])
 
-    def test():
-        return jsonify({
-            "message": "Hello World!"
-        })
 
-    @app.route('/api', methods=['POST'])
-    def gpt3():
-        # get the data from the request (the data is in JSON format)
-        data = request.get_json(force=True)
-        message = data['message']
-        response = openai.Completion.create(
-            model=model,
-            prompt=message,
-            max_tokens=3000,
-            temperature=0.9,
-        )
-        print(response.choices[0].text)
-        # send back the response to the client
-        return jsonify({
-            "message": response.choices[0].text,
+def test():
+    return jsonify({
+        "message": "Hello World!"
+    })
 
-        })
 
-    return app
+@app.route('/api', methods=['POST'])
+def gpt3():
+    # get the data from the request (the data is in JSON format)
+    data = request.get_json(force=True)
+    message = data['message']
+    response = openai.Completion.create(
+        model=model,
+        prompt=message,
+        max_tokens=3000,
+        temperature=0.9,
+    )
+    print(response.choices[0].text)
+    # send back the response to the client
+    return jsonify({
+        "message": response.choices[0].text,
+
+    })
 
 
 if __name__ == '__main__':
-    app = main()
     app.run(host='0.0.0.0', port=8080)
     # localhost:8000/api
     # Path: python/requirements.txt
